@@ -20,11 +20,13 @@ class TimeTravel extends DateTime
 
     /**
      * TimeTravel constructor.
-     * @param $time
+     * @param DateTime $start
+     * @param DateTime $end
      */
-    public function __construct($time)
+    public function __construct(DateTime $start, DateTime $end)
     {
-        parent::__construct($time);
+        $this->start = $start;
+        $this->end = $end;
     }
 
     /**
@@ -72,14 +74,17 @@ class TimeTravel extends DateTime
 
     public function findDate($interval)
     {
-        return $this->sub($interval)->format('Y-m-d H:i:s');
+        return $this->start->sub($interval)->format('Y-m-d H:i:s');
     }
 
     public function backToFutureStepByStep($step)
     {
-        $dateRange = new DatePeriod($this->getStart(), $step, $this->getEnd());
+        $result = [];
+        $dateRange = new DatePeriod($this->start, $step, $this->end);
         foreach ($dateRange as $date) {
-            return $date->format('Y-m-d H:i:s') . '<br/>';
+            $result[] = $date;
         }
+
+        return $result;
     }
 }
